@@ -26,24 +26,23 @@ def setup():
 
 INPUTS = {
     'reference': image,
-    'noise': vector(512),
-    'iterations': number(default=1000, min=1, max=10000),
+    'iterations': number(default=500, min=1, max=10000),
     'learning_rate': number(default=1, step=0.01, min=0, max=3)
 }
 
-
-@runway.command('autoencode', inputs=INPUTS, outputs={'output': image})
+@runway.command('autoencode', inputs=INPUTS, outputs={'output': vector(512)})
 def autoencode(model, inputs):
     perceptual_model, generator = model
     perceptual_model.set_reference_images([inputs['reference']])
     op = perceptual_model.optimize(generator.dlatent_variable, iterations=inputs['iterations'], learning_rate=inputs['learning_rate'])
     pbar = tqdm(op, leave=False, total=inputs['iterations'])
+    print('Processing image...')
     for loss in pbar:
         pbar.set_description('Loss: %.2f' % loss)
     generated_images = generator.generate_images()
     generated_dlatents = generator.get_dlatents()
     generator.reset_dlatents()
-    return generated_images[0]
+    return generated_dlatents[0]
 
 
 if __name__ == '__main__':
