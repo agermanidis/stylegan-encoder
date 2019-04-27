@@ -1,4 +1,4 @@
-entrypoint: python model.py
+entrypoint: python runway_model.py
 python: 3.6
 framework: tensorflow
 cuda: 9.0
