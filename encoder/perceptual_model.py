@@ -4,12 +4,13 @@ from keras.models import Model
 from keras.applications.vgg16 import VGG16, preprocess_input
 from keras.preprocessing import image
 import keras.backend as K
+import PIL
 
 
 def load_images(images_list, img_size):
     loaded_images = list()
-    for img_path in images_list:
-        img = image.load_img(img_path, target_size=(img_size, img_size))
+    for img in images_list:
+        img = img.resize(img_size, PIL.Image.NEAREST)
         img = np.expand_dims(img, 0)
         loaded_images.append(img)
     loaded_images = np.vstack(loaded_images)
