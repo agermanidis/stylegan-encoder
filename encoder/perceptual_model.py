@@ -10,7 +10,7 @@ import PIL
 def load_images(images_list, img_size):
     loaded_images = list()
     for img in images_list:
-        img = img.resize(img_size, PIL.Image.NEAREST)
+        img = img.resize((img_size, img_size), PIL.Image.NEAREST)
         img = np.expand_dims(img, 0)
         loaded_images.append(img)
     loaded_images = np.vstack(loaded_images)
