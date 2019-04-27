@@ -4,9 +4,10 @@ import tensorflow as tf
 import dnnlib.tflib as tflib
 import dnnlib
 import runway
-from runway.data_types import checkpoint, number, vector, image
+from runway.data_types import number, vector, image
 from encoder.generator_model import Generator
 from encoder.perceptual_model import PerceptualModel
+from tqdm import tqdm
 
 fmt = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
 
@@ -36,6 +37,9 @@ def autoencode(model, inputs):
     perceptual_model, generator = model
     perceptual_model.set_reference_images([inputs['reference']])
     op = perceptual_model.optimize(generator.dlatent_variable, iterations=inputs['iterations'], learning_rate=inputs['learning_rate'])
+    pbar = tqdm(op, leave=False, total=inputs['iterations'])
+    for loss in pbar:
+        pbar.set_description('Loss: %.2f' % loss)
     generated_images = generator.generate_images()
     generated_dlatents = generator.get_dlatents()
     generator.reset_dlatents()
