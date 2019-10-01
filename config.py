@@ -15,4 +15,8 @@ data_dir = 'datasets'
 cache_dir = 'cache'
 run_dir_ignore = ['results', 'datasets', 'cache']
 
+# experimental - replace Dense layers with TreeConnect
+use_treeconnect = False
+treeconnect_threshold = 1024
+
 #----------------------------------------------------------------------------
